@@ -1,0 +1,38 @@
+{
+  "Records": [
+      {
+          "eventVersion": "2.1",
+          "eventSource": "aws:s3",
+          "awsRegion": "ap-northeast-1",
+          "eventTime": "2023-05-26T04:42:48.756Z",
+          "eventName": "ObjectCreated:CompleteMultipartUpload",
+          "userIdentity": {
+              "principalId": "AWS:AIDA4Z3JBOJX3P2HDEOSV"
+          },
+          "requestParameters": {
+              "sourceIPAddress": "153.239.136.0"
+          },
+          "responseElements": {
+              "x-amz-request-id": "1H5T9H9WESYQ8HVW",
+              "x-amz-id-2": "Gkh3dxyK0eRjuYF+Pd7inFD1hHJqm9Y/C9kYnd0hKcKgEETtkCDOu7fYC+21MgI12cVtvJu7iG1GuBPcf/q+FN9jH36N67hHcjG0gtg2pWo="
+          },
+          "s3": {
+              "s3SchemaVersion": "1.0",
+              "configurationId": "tf-s3-lambda-20230526025721152400000002",
+              "bucket": {
+                  "name": "video-clipper-input",
+                  "ownerIdentity": {
+                      "principalId": "A2RULSIDMT29NS"
+                  },
+                  "arn": "arn:aws:s3:::video-clipper-input"
+              },
+              "object": {
+                  "key": "blah.mp4",
+                  "size": 24186108,
+                  "eTag": "45349365ee18d0f23ecb4eeee88e669a-2",
+                  "sequencer": "00647038C71D988D5B"
+              }
+          }
+      }
+  ]
+}
