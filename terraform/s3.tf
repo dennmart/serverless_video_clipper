@@ -13,3 +13,9 @@ resource "aws_s3_bucket_notification" "input_bucket_notification" {
     events              = ["s3:ObjectCreated:*"]
   }
 }
+
+# Amazon S3 bucket that will be used as the Elemental MediaConvert output bucket.
+resource "aws_s3_bucket" "output_bucket" {
+  bucket        = "video-clipper-output"
+  force_destroy = true
+}
