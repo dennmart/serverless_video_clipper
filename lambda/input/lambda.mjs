@@ -1,37 +1,39 @@
 import { S3Client, HeadObjectCommand } from "@aws-sdk/client-s3";
+import triggerMediaConvertJob from "./mediaConvertJob.mjs";
 
 export const handler = async (event) => {
-  console.log(JSON.stringify(event));
   const s3Bucket = event.Records[0].s3.bucket.name;
   const s3Object = event.Records[0].s3.object.key;
 
   const config = {
     region: "ap-northeast-1",
   };
-  const client = new S3Client(config);
-  const command = new HeadObjectCommand({
+
+  const s3Client = new S3Client(config);
+  const s3HeadCommand = new HeadObjectCommand({
     Bucket: s3Bucket,
     Key: s3Object,
   });
 
   try {
-    const response = await client.send(command);
+    const response = await s3Client.send(s3HeadCommand);
 
     if (response.ContentType == "video/mp4") {
+      const job = await triggerMediaConvertJob(s3Bucket, s3Object);
       return {
-        statusCode: 200,
-        body: "You uploaded a video!",
+        statusCode: 201,
+        body: JSON.stringify(job),
       };
     } else {
       return {
         statusCode: 400,
-        body: "Stop uploading incorrect file types!",
+        body: "Not an mp4 video file",
       };
     }
-  } catch {
+  } catch (error) {
     return {
       statusCode: 404,
-      body: "File not found!",
+      body: JSON.stringify(error),
     };
   }
 };

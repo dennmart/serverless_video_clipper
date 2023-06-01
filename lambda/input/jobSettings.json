@@ -1,0 +1,84 @@
+{
+  "Settings": {
+    "Inputs": [
+      {
+        "TimecodeSource": "ZEROBASED",
+        "VideoSelector": {},
+        "AudioSelectors": {
+          "Audio Selector 1": {
+            "DefaultSelection": "DEFAULT"
+          }
+        },
+        "FileInput": "s3://input-s3-bucket/input-s3-object",
+        "InputClippings": [
+          {
+            "StartTimecode": "00:00:00:00",
+            "EndTimecode": "00:00:15:00"
+          }
+        ]
+      }
+    ],
+    "OutputGroups": [
+      {
+        "Name": "File Group",
+        "OutputGroupSettings": {
+          "Type": "FILE_GROUP_SETTINGS",
+          "FileGroupSettings": {
+            "Destination": "s3://output-s3-bucket/"
+          }
+        },
+        "Outputs": [
+          {
+            "VideoDescription": {
+              "CodecSettings": {
+                "Codec": "H_264",
+                "H264Settings": {
+                  "RateControlMode": "QVBR",
+                  "SceneChangeDetect": "TRANSITION_DETECTION",
+                  "MaxBitrate": 5000000
+                }
+              },
+              "VideoPreprocessors": {
+                "ImageInserter": {
+                  "InsertableImages": [
+                    {
+                      "Opacity": 35,
+                      "ImageInserterInput": "s3://video-clipper-input/dev-tester.png",
+                      "Width": 200,
+                      "Height": 55,
+                      "ImageX": 10,
+                      "ImageY": 1000,
+                      "FadeIn": 1000,
+                      "StartTime": "00:00:01:00",
+                      "Layer": 0
+                    }
+                  ]
+                }
+              }
+            },
+            "AudioDescriptions": [
+              {
+                "CodecSettings": {
+                  "Codec": "AAC",
+                  "AacSettings": {
+                    "Bitrate": 96000,
+                    "CodingMode": "CODING_MODE_2_0",
+                    "SampleRate": 48000
+                  }
+                }
+              }
+            ],
+            "ContainerSettings": {
+              "Container": "MP4",
+              "Mp4Settings": {}
+            }
+          }
+        ]
+      }
+    ],
+    "TimecodeConfig": {
+      "Source": "ZEROBASED"
+    }
+  },
+  "Role": "arn:aws:iam::111111111111:role/MediaConvert_Default_Role"
+}
