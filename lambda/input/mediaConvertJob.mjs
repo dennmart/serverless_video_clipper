@@ -1,14 +1,15 @@
 import fs from "fs";
-
 import {
   MediaConvertClient,
   CreateJobCommand,
 } from "@aws-sdk/client-mediaconvert";
+import mediaConvertEndpoint from "./mediaConvertEndpoint.mjs";
 
 export default async (s3Bucket, s3Object) => {
+  const endpoints = await mediaConvertEndpoint();
   const config = {
     region: "ap-northeast-1",
-    endpoint: "https://1muozxeta.mediaconvert.ap-northeast-1.amazonaws.com",
+    endpoint: endpoints.Endpoints[0].Url,
   };
 
   const client = new MediaConvertClient(config);
