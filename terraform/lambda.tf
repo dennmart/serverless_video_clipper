@@ -13,6 +13,14 @@ resource "aws_lambda_function" "input_function" {
   handler          = "lambda.handler"
   runtime          = "nodejs18.x"
   source_code_hash = data.archive_file.lambda.output_base64sha256
+  timeout          = 10
+
+  environment {
+    variables = {
+      OUTPUT_BUCKET         = aws_s3_bucket.output_bucket.id
+      MEDIACONVERT_ROLE_ARN = aws_iam_role.mediaconvert_iam_role.arn
+    }
+  }
 }
 
 # Grants the S3 bucket permission to invoke our Lambda function.
