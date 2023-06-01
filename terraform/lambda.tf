@@ -1,7 +1,7 @@
 # Generates an archive of the Lambda function that's triggered by the S3 bucket notification.
 data "archive_file" "lambda" {
   type        = "zip"
-  source_file = "${path.module}/../lambda/input/lambda.mjs"
+  source_dir  = "${path.module}/../lambda/input"
   output_path = "video_clipper_input.zip"
 }
 
