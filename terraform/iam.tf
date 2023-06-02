@@ -25,13 +25,13 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
   role       = aws_iam_role.lambda_iam_role.name
 }
 
-# Policy document to allow Lambda to access our S3 buckets to get file info.
+# Policy document to allow Lambda to access our S3 buckets to get file info,
+# pass a role, and perform MediaConvert actions.
 data "aws_iam_policy_document" "lambda_policy_document" {
   statement {
     effect = "Allow"
     actions = [
-      "s3:GetObject",
-      "s3:ListObject",
+      "s3:GetObject"
     ]
     resources = [
       "${aws_s3_bucket.input_bucket.arn}/*"
@@ -41,10 +41,38 @@ data "aws_iam_policy_document" "lambda_policy_document" {
   statement {
     effect = "Allow"
     actions = [
-      "s3:ListBucket",
+      "s3:ListBucket"
     ]
     resources = [
       aws_s3_bucket.input_bucket.arn
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "iam:PassRole"
+    ]
+    resources = [
+      aws_iam_role.lambda_iam_role.arn
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "mediaconvert:DescribeEndpoints"
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "mediaconvert:CreateJob"
+    ]
+    resources = [
+      aws_media_convert_queue.default.arn
     ]
   }
 }
