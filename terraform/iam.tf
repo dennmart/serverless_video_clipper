@@ -25,6 +25,42 @@ resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
   role       = aws_iam_role.lambda_iam_role.name
 }
 
+# Policy document to allow Lambda to access our S3 buckets to get file info.
+data "aws_iam_policy_document" "lambda_policy_document" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:ListObject",
+    ]
+    resources = [
+      "${aws_s3_bucket.input_bucket.arn}/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket",
+    ]
+    resources = [
+      aws_s3_bucket.input_bucket.arn
+    ]
+  }
+}
+
+# Policy to attach to the Lambda IAM role.
+resource "aws_iam_policy" "lambda_role_policy" {
+  name   = "video-clipper-lambda-role-policy"
+  policy = data.aws_iam_policy_document.lambda_policy_document.json
+}
+
+# Attach the Lambda policy to the IAM role.
+resource "aws_iam_role_policy_attachment" "attach_lambda_policy" {
+  role       = aws_iam_role.lambda_iam_role.name
+  policy_arn = aws_iam_policy.lambda_role_policy.arn
+}
+
 # Policy document to allow access to MediaConvert.
 data "aws_iam_policy_document" "assume_mediaconvert_role" {
   statement {
