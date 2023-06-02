@@ -37,23 +37,6 @@
                   "SceneChangeDetect": "TRANSITION_DETECTION",
                   "MaxBitrate": 5000000
                 }
-              },
-              "VideoPreprocessors": {
-                "ImageInserter": {
-                  "InsertableImages": [
-                    {
-                      "Opacity": 35,
-                      "ImageInserterInput": "s3://video-clipper-input/dev-tester.png",
-                      "Width": 200,
-                      "Height": 55,
-                      "ImageX": 10,
-                      "ImageY": 1000,
-                      "FadeIn": 1000,
-                      "StartTime": "00:00:01:00",
-                      "Layer": 0
-                    }
-                  ]
-                }
               }
             },
             "AudioDescriptions": [
