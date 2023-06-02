@@ -54,7 +54,7 @@ data "aws_iam_policy_document" "lambda_policy_document" {
       "iam:PassRole"
     ]
     resources = [
-      aws_iam_role.lambda_iam_role.arn
+      aws_iam_role.mediaconvert_iam_role.arn
     ]
   }
 
