@@ -90,7 +90,7 @@ data "aws_iam_policy_document" "mediaconvert_policy_document" {
       "s3:List*",
     ]
     resources = [
-      "arn:aws:s3:::video-clipper-input/*"
+      "${aws_s3_bucket.input_bucket.arn}/*"
     ]
   }
 
@@ -100,7 +100,7 @@ data "aws_iam_policy_document" "mediaconvert_policy_document" {
       "s3:Put*"
     ]
     resources = [
-      "arn:aws:s3:::video-clipper-output/*"
+      "${aws_s3_bucket.output_bucket.arn}/*"
     ]
   }
 }
