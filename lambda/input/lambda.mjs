@@ -31,8 +31,10 @@ export const handler = async (event) => {
       };
     }
   } catch (error) {
+    console.log(JSON.stringify(error));
+
     return {
-      statusCode: 404,
+      statusCode: 500,
       body: JSON.stringify(error),
     };
   }
