@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 import {
   MediaConvertClient,
   CreateJobCommand,
@@ -13,10 +14,14 @@ export default async (s3Bucket, s3Object) => {
   };
 
   const client = new MediaConvertClient(config);
+  const inputFile = `s3://${s3Bucket}/${s3Object}`;
+  const outputFolder = path.parse(s3Object).name;
+  const outputBucket = `s3://${process.env.OUTPUT_BUCKET}/${outputFolder}/`;
 
   const jobSettings = JSON.parse(fs.readFileSync("jobSettings.json", "utf8"));
-  jobSettings.Settings.Inputs[0].FileInput = `s3://${s3Bucket}/${s3Object}`;
-  jobSettings.Settings.OutputGroups[0].OutputGroupSettings.FileGroupSettings.Destination = `s3://${process.env.OUTPUT_BUCKET}/`;
+  jobSettings.Settings.Inputs[0].FileInput = inputFile;
+  jobSettings.Settings.OutputGroups[0].OutputGroupSettings.FileGroupSettings.Destination =
+    outputBucket;
   jobSettings.Role = process.env.MEDIACONVERT_ROLE_ARN;
 
   const command = new CreateJobCommand(jobSettings);
