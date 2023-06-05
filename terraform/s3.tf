@@ -14,6 +14,12 @@ resource "aws_s3_bucket_notification" "input_bucket_notification" {
   }
 }
 
+resource "aws_s3_object" "processed_videos" {
+  bucket = aws_s3_bucket.input_bucket.id
+  key    = "processed_videos/"
+  acl    = "private"
+}
+
 # Amazon S3 bucket that will be used as the Elemental MediaConvert output bucket.
 resource "aws_s3_bucket" "output_bucket" {
   bucket        = "video-clipper-output"
