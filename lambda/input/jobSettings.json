@@ -54,7 +54,23 @@
             "ContainerSettings": {
               "Container": "MP4",
               "Mp4Settings": {}
-            }
+            },
+            "NameModifier": "Clipped Video"
+          },
+          {
+            "VideoDescription": {
+              "CodecSettings": {
+                "Codec": "FRAME_CAPTURE",
+                "FrameCaptureSettings": {
+                  "FramerateNumerator": 30,
+                  "FramerateDenominator": 90
+                }
+              }
+            },
+            "ContainerSettings": {
+              "Container": "RAW"
+            },
+            "NameModifier": "Thumbnails"
           }
         ]
       }
