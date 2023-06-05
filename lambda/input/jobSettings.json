@@ -54,8 +54,7 @@
             "ContainerSettings": {
               "Container": "MP4",
               "Mp4Settings": {}
-            },
-            "NameModifier": "Clipped Video"
+            }
           },
           {
             "VideoDescription": {
@@ -69,8 +68,7 @@
             },
             "ContainerSettings": {
               "Container": "RAW"
-            },
-            "NameModifier": "Thumbnails"
+            }
           }
         ]
       }
