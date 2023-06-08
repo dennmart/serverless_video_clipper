@@ -23,6 +23,7 @@ export default async (s3Bucket, s3Object) => {
   jobSettings.Settings.OutputGroups[0].OutputGroupSettings.FileGroupSettings.Destination =
     outputBucket;
   jobSettings.Role = process.env.MEDIACONVERT_ROLE_ARN;
+  jobSettings.Queue = process.env.MEDIACONVERT_QUEUE_ARN;
 
   const command = new CreateJobCommand(jobSettings);
   const response = await client.send(command);

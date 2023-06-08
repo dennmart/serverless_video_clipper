@@ -17,8 +17,9 @@ resource "aws_lambda_function" "input_function" {
 
   environment {
     variables = {
-      OUTPUT_BUCKET         = aws_s3_bucket.output_bucket.id
-      MEDIACONVERT_ROLE_ARN = aws_iam_role.mediaconvert_iam_role.arn
+      OUTPUT_BUCKET          = aws_s3_bucket.output_bucket.id
+      MEDIACONVERT_ROLE_ARN  = aws_iam_role.mediaconvert_iam_role.arn
+      MEDIACONVERT_QUEUE_ARN = aws_media_convert_queue.video_clipper_queue.arn
     }
   }
 }
