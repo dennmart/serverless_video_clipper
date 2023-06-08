@@ -32,4 +32,4 @@ terraform.rc
 **/.aws-sam-iacs/
 
 # Ignore packaged Lambda functions in Terraform
-/terraform/video_clipper_input.zip
+/terraform/*.zip
