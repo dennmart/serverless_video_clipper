@@ -72,7 +72,7 @@ data "aws_iam_policy_document" "lambda_policy_document" {
       "mediaconvert:CreateJob"
     ]
     resources = [
-      aws_media_convert_queue.default.arn
+      aws_media_convert_queue.video_clipper_queue.arn
     ]
   }
 }

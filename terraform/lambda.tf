@@ -2,13 +2,13 @@
 data "archive_file" "lambda" {
   type        = "zip"
   source_dir  = "${path.module}/../lambda/input"
-  output_path = "video_clipper_input.zip"
+  output_path = "video_clipper_processing.zip"
 }
 
 # Uploads our Lambda function with the proper roles.
 resource "aws_lambda_function" "input_function" {
   filename         = data.archive_file.lambda.output_path
-  function_name    = "video-clipper-input"
+  function_name    = var.lambda_function_name
   role             = aws_iam_role.lambda_iam_role.arn
   handler          = "lambda.handler"
   runtime          = "nodejs18.x"
