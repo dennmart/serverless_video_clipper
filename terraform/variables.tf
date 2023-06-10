@@ -13,12 +13,27 @@ variable "processed_videos_folder_name" {
   type        = string
 }
 
-variable "lambda_function_name" {
+variable "lambda_processor_function_name" {
   description = "(Required) The name of the Lambda function to process videos"
+  type        = string
+}
+
+variable "lambda_job_completed_function_name" {
+  description = "(Required) The name of the Lambda function to notify when MediaConvert jobs are completed"
   type        = string
 }
 
 variable "media_convert_queue_name" {
   description = "(Required) The name of the MediaConvert queue to use for processing videos"
+  type        = string
+}
+
+variable "media_convert_sns_topic_name" {
+  description = "(Required) The name of the SNS topic to use for MediaConvert job status notifications"
+  type        = string
+}
+
+variable "event_bridge_rule_name" {
+  description = "(Required) The name of the EventBridge rule to use for MediaConvert job status notifications"
   type        = string
 }
