@@ -4,12 +4,12 @@ variable "input_bucket_name" {
 }
 
 variable "output_bucket_name" {
-  description = "(Required) The name of the S3 bucket to store the processed videos and thumbnails"
+  description = "(Required) The name of the S3 bucket to store the clipped videos and thumbnails"
   type        = string
 }
 
-variable "processed_videos_folder_name" {
-  description = "(Required) The name of the folder in the input bucket to store videos after processing"
+variable "processed_videos_bucket_name" {
+  description = "(Required) The name of the S3 bucket to store the processed videos for future deletion"
   type        = string
 }
 
