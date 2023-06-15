@@ -17,7 +17,7 @@ resource "aws_lambda_function" "input_function" {
 
   environment {
     variables = {
-      OUTPUT_BUCKET          = aws_s3_bucket.output_bucket.id
+      OUTPUT_BUCKET          = module.s3_buckets.output_bucket_id
       MEDIACONVERT_ROLE_ARN  = aws_iam_role.mediaconvert_iam_role.arn
       MEDIACONVERT_QUEUE_ARN = aws_media_convert_queue.video_clipper_queue.arn
     }
@@ -29,7 +29,7 @@ resource "aws_lambda_permission" "allow_bucket" {
   statement_id  = "AllowExecutionFromS3Bucket"
   action        = "lambda:InvokeFunction"
   principal     = "s3.amazonaws.com"
-  source_arn    = aws_s3_bucket.input_bucket.arn
+  source_arn    = module.s3_buckets.input_bucket_arn
   function_name = aws_lambda_function.input_function.arn
 }
 
