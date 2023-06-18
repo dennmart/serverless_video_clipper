@@ -33,7 +33,7 @@ variable "media_convert_sns_topic_name" {
   type        = string
 }
 
-variable "event_bridge_rule_name" {
+variable "eventbridge_rule_name" {
   description = "The name of the EventBridge rule to use for MediaConvert job status notifications"
   type        = string
 }

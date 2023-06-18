@@ -29,11 +29,18 @@ module "lambda" {
   input_bucket_arn       = module.s3.input_bucket_arn
   cleanup_function_name  = var.cleanup_function_name
   cleanup_function_role  = aws_iam_role.lambda_iam_role.arn
-  eventbridge_rule_arn   = aws_cloudwatch_event_rule.media_convert_job_completed.arn
+  eventbridge_rule_arn   = module.eventbridge.media_convert_job_completed_rule_arn
 }
 
 module "media_convert" {
   source = "./modules/mediaconvert"
 
   media_convert_queue_name = var.media_convert_queue_name
+}
+
+module "eventbridge" {
+  source = "./modules/eventbridge"
+
+  eventbridge_rule_name = var.eventbridge_rule_name
+  cleanup_function_arn  = module.lambda.cleanup_function_arn
 }
