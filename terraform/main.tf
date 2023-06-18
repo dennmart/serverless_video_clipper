@@ -25,12 +25,15 @@ module "lambda" {
   input_function_role    = aws_iam_role.lambda_iam_role.arn
   output_bucket_id       = module.s3_buckets.output_bucket_id
   mediaconvert_role_arn  = aws_iam_role.mediaconvert_iam_role.arn
-  mediaconvert_queue_arn = aws_media_convert_queue.video_clipper_queue.arn
+  mediaconvert_queue_arn = module.media_convert.queue_arn
   input_bucket_arn       = module.s3_buckets.input_bucket_arn
   cleanup_function_name  = var.cleanup_function_name
   cleanup_function_role  = aws_iam_role.lambda_iam_role.arn
   eventbridge_rule_arn   = aws_cloudwatch_event_rule.media_convert_job_completed.arn
-  # lambda_job_completed_name  = var.lambda_job_completed_name
-  # lambda_job_completed_role  = aws_iam_role.lambda_iam_role.arn
-  # lambda_job_completed_queue = aws_media_convert_queue.video_clipper_queue.arn
+}
+
+module "media_convert" {
+  source = "./modules/mediaconvert"
+
+  media_convert_queue_name = var.media_convert_queue_name
 }
