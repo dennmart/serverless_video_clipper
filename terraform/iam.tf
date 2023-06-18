@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "lambda_policy_document" {
       "s3:GetObject"
     ]
     resources = [
-      "${module.s3_buckets.input_bucket_arn}/*"
+      "${module.s3.input_bucket_arn}/*"
     ]
   }
 
@@ -55,7 +55,7 @@ data "aws_iam_policy_document" "lambda_policy_document" {
       "s3:ListBucket"
     ]
     resources = [
-      module.s3_buckets.input_bucket_arn
+      module.s3.input_bucket_arn
     ]
   }
 
@@ -117,7 +117,7 @@ data "aws_iam_policy_document" "lambda_job_complete_policy_document" {
       "s3:DeleteObject"
     ]
     resources = [
-      "${module.s3_buckets.input_bucket_arn}/*"
+      "${module.s3.input_bucket_arn}/*"
     ]
   }
 
@@ -191,7 +191,7 @@ data "aws_iam_policy_document" "mediaconvert_policy_document" {
       "s3:List*",
     ]
     resources = [
-      "${module.s3_buckets.input_bucket_arn}/*"
+      "${module.s3.input_bucket_arn}/*"
     ]
   }
 
@@ -201,7 +201,7 @@ data "aws_iam_policy_document" "mediaconvert_policy_document" {
       "s3:Put*"
     ]
     resources = [
-      "${module.s3_buckets.output_bucket_arn}/*"
+      "${module.s3.output_bucket_arn}/*"
     ]
   }
 }
