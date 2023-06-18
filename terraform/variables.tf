@@ -13,12 +13,12 @@ variable "processed_videos_bucket_name" {
   type        = string
 }
 
-variable "lambda_processor_function_name" {
+variable "input_function_name" {
   description = "The name of the Lambda function to process videos"
   type        = string
 }
 
-variable "lambda_job_completed_function_name" {
+variable "cleanup_function_name" {
   description = "The name of the Lambda function to notify when MediaConvert jobs are completed"
   type        = string
 }

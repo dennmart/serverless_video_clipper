@@ -12,5 +12,5 @@ resource "aws_cloudwatch_event_rule" "media_convert_job_completed" {
 
 resource "aws_cloudwatch_event_target" "media_convert_job_completed" {
   rule = aws_cloudwatch_event_rule.media_convert_job_completed.name
-  arn  = aws_lambda_function.media_convert_job_completed.arn
+  arn  = module.lambda.cleanup_function_arn
 }
