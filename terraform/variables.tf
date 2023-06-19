@@ -37,3 +37,34 @@ variable "eventbridge_rule_name" {
   description = "The name of the EventBridge rule to use for MediaConvert job status notifications"
   type        = string
 }
+
+variable "mediaconvert_role_policy_name" {
+  description = "The name of the IAM policy to attach to the MediaConvert IAM role"
+  type        = string
+  default     = "MediaConvert_Default_Role_Policy"
+}
+
+variable "mediaconvert_role_name" {
+  description = "The name of the IAM role to use for MediaConvert"
+  type        = string
+}
+
+variable "cleanup_function_role_policy_name" {
+  description = "The name of the IAM policy to attach to the cleanup function IAM role"
+  type        = string
+}
+
+variable "cleanup_function_role_name" {
+  description = "The name of the IAM role to use for the cleanup function"
+  type        = string
+}
+
+variable "input_function_role_policy_name" {
+  description = "The name of the IAM policy to attach to the input function IAM role"
+  type        = string
+}
+
+variable "input_function_role_name" {
+  description = "The name of the IAM role to use for the input function"
+  type        = string
+}

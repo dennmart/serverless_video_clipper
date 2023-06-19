@@ -22,13 +22,13 @@ module "lambda" {
   source = "./modules/lambda"
 
   input_function_name    = var.input_function_name
-  input_function_role    = aws_iam_role.lambda_iam_role.arn
+  input_function_role    = module.iam.input_function_role_arn
   output_bucket_id       = module.s3.output_bucket_id
-  mediaconvert_role_arn  = aws_iam_role.mediaconvert_iam_role.arn
+  mediaconvert_role_arn  = module.iam.media_convert_role_arn
   mediaconvert_queue_arn = module.media_convert.queue_arn
   input_bucket_arn       = module.s3.input_bucket_arn
   cleanup_function_name  = var.cleanup_function_name
-  cleanup_function_role  = aws_iam_role.lambda_iam_role.arn
+  cleanup_function_role  = module.iam.cleanup_function_role_arn
   eventbridge_rule_arn   = module.eventbridge.media_convert_job_completed_rule_arn
 }
 
@@ -43,4 +43,18 @@ module "eventbridge" {
 
   eventbridge_rule_name = var.eventbridge_rule_name
   cleanup_function_arn  = module.lambda.cleanup_function_arn
+}
+
+module "iam" {
+  source = "./modules/iam"
+
+  input_function_role_name          = var.input_function_role_name
+  cleanup_function_role_name        = var.cleanup_function_role_name
+  input_bucket_arn                  = module.s3.input_bucket_arn
+  media_convert_queue_arn           = module.media_convert.queue_arn
+  input_function_role_policy_name   = var.input_function_role_policy_name
+  cleanup_function_role_policy_name = var.cleanup_function_role_policy_name
+  mediaconvert_iam_role_name        = var.mediaconvert_role_name
+  output_bucket_arn                 = module.s3.output_bucket_arn
+  mediaconvert_role_policy_name     = var.mediaconvert_role_policy_name
 }

@@ -1,4 +1,14 @@
-# Policy document to allow the S3 bucket event notification to invoke our Lambda function.
+locals {
+  mediaconvert_jobs_arn = "arn:${data.aws_partition.current.partition}:mediaconvert:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:jobs/*"
+}
+
+data "aws_region" "current" {}
+
+data "aws_partition" "current" {}
+
+data "aws_caller_identity" "current" {}
+
+# Policy document to allow different roles to invoke our Lambda functions.
 data "aws_iam_policy_document" "assume_lambda_role" {
   statement {
     effect = "Allow"
@@ -13,27 +23,29 @@ data "aws_iam_policy_document" "assume_lambda_role" {
 }
 
 # IAM role to set on our Lambda input function.
-resource "aws_iam_role" "lambda_iam_role" {
-  name               = "video-clipper-lambda-iam-role"
+resource "aws_iam_role" "lambda_input_function_role" {
+  name               = var.input_function_role_name
   assume_role_policy = data.aws_iam_policy_document.assume_lambda_role.json
 }
 
-# IAM role to set on our Lambda job complete function.
-resource "aws_iam_role" "lambda_job_completed_role" {
-  name               = "VideoClipperLambdaJobCompleteRole"
+# IAM role to set on our Lambda cleanup function.
+resource "aws_iam_role" "lambda_cleanup_function_role" {
+  name               = var.cleanup_function_role_name
   assume_role_policy = data.aws_iam_policy_document.assume_lambda_role.json
 }
 
-# Attach the AWSLambdaBasicExecutionRole to allow Lambda functions to
+# Attach the AWSLambdaBasicExecutionRole to allow input function to
 # write logs to CloudWatch.
-resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
+resource "aws_iam_role_policy_attachment" "input_function_basic_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  role       = aws_iam_role.lambda_iam_role.name
+  role       = aws_iam_role.lambda_input_function_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_job_complete_basic_execution" {
+# Attach the AWSLambdaBasicExecutionRole to allow cleanup function to
+# write logs to CloudWatch.
+resource "aws_iam_role_policy_attachment" "cleanup_function_basic_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  role       = aws_iam_role.lambda_job_completed_role.name
+  role       = aws_iam_role.lambda_cleanup_function_role.name
 }
 
 # Policy document to allow the Lambda input function to access our S3 buckets
@@ -45,7 +57,7 @@ data "aws_iam_policy_document" "lambda_policy_document" {
       "s3:GetObject"
     ]
     resources = [
-      "${module.s3.input_bucket_arn}/*"
+      "${var.input_bucket_arn}/*"
     ]
   }
 
@@ -55,7 +67,7 @@ data "aws_iam_policy_document" "lambda_policy_document" {
       "s3:ListBucket"
     ]
     resources = [
-      module.s3.input_bucket_arn
+      var.input_bucket_arn
     ]
   }
 
@@ -83,32 +95,25 @@ data "aws_iam_policy_document" "lambda_policy_document" {
       "mediaconvert:CreateJob"
     ]
     resources = [
-      module.media_convert.queue_arn
+      var.media_convert_queue_arn
     ]
   }
 }
 
 # Policy to attach to the Lambda input IAM role.
-resource "aws_iam_policy" "lambda_role_policy" {
-  name   = "video-clipper-lambda-role-policy"
+resource "aws_iam_policy" "lambda_input_function_role_policy" {
+  name   = var.input_function_role_policy_name
   policy = data.aws_iam_policy_document.lambda_policy_document.json
 }
 
 # Attach the Lambda policy to the IAM role.
 resource "aws_iam_role_policy_attachment" "attach_lambda_policy" {
-  role       = aws_iam_role.lambda_iam_role.name
-  policy_arn = aws_iam_policy.lambda_role_policy.arn
+  role       = aws_iam_role.lambda_input_function_role.name
+  policy_arn = aws_iam_policy.lambda_input_function_role_policy.arn
 }
 
-# Policy document to allow the Lambda job complete function to perform
-#  MediaConvert actions and access our S3 input bucket.
-
-data "aws_region" "current" {}
-
-data "aws_partition" "current" {}
-
-data "aws_caller_identity" "current" {}
-
+# Policy document to allow the Lambda cleanup function to perform
+# MediaConvert actions and access our S3 input bucket.
 data "aws_iam_policy_document" "lambda_job_complete_policy_document" {
   statement {
     effect = "Allow"
@@ -117,7 +122,7 @@ data "aws_iam_policy_document" "lambda_job_complete_policy_document" {
       "s3:DeleteObject"
     ]
     resources = [
-      "${module.s3.input_bucket_arn}/*"
+      "${var.input_bucket_arn}/*"
     ]
   }
 
@@ -145,24 +150,24 @@ data "aws_iam_policy_document" "lambda_job_complete_policy_document" {
       "mediaconvert:GetJob"
     ]
     resources = [
-      "arn:${data.aws_partition.current.partition}:mediaconvert:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:jobs/*"
+      local.mediaconvert_jobs_arn
     ]
   }
 }
 
-# Policy to attach to the Lambda job completed IAM role.
-resource "aws_iam_policy" "lambda_job_completed_role_policy" {
-  name   = "VideoClipperLambdaJobCompletedRolePolicy"
+# Policy to attach to the Lambda IAM role for the cleanup function.
+resource "aws_iam_policy" "lambda_cleanup_function_role_policy" {
+  name   = var.cleanup_function_role_policy_name
   policy = data.aws_iam_policy_document.lambda_job_complete_policy_document.json
 }
 
-# Attach the Lambda policy to the IAM role for the Lambda job completed function.
+# Attach the Lambda policy to the IAM role for the Lambda cleanup function.
 resource "aws_iam_role_policy_attachment" "attach_lambda_job_completed_policy" {
-  role       = aws_iam_role.lambda_job_completed_role.name
-  policy_arn = aws_iam_policy.lambda_job_completed_role_policy.arn
+  role       = aws_iam_role.lambda_cleanup_function_role.name
+  policy_arn = aws_iam_policy.lambda_cleanup_function_role_policy.arn
 }
 
-# Policy document to allow access to MediaConvert.
+# Policy document for the cleanup function to allow access to MediaConvert.
 data "aws_iam_policy_document" "assume_mediaconvert_role" {
   statement {
     effect = "Allow"
@@ -178,7 +183,7 @@ data "aws_iam_policy_document" "assume_mediaconvert_role" {
 
 # IAM role to set for MediaConvert jobs.
 resource "aws_iam_role" "mediaconvert_iam_role" {
-  name               = "MediaConvert_Default_Role"
+  name               = var.mediaconvert_iam_role_name
   assume_role_policy = data.aws_iam_policy_document.assume_mediaconvert_role.json
 }
 
@@ -191,7 +196,7 @@ data "aws_iam_policy_document" "mediaconvert_policy_document" {
       "s3:List*",
     ]
     resources = [
-      "${module.s3.input_bucket_arn}/*"
+      "${var.input_bucket_arn}/*"
     ]
   }
 
@@ -201,14 +206,14 @@ data "aws_iam_policy_document" "mediaconvert_policy_document" {
       "s3:Put*"
     ]
     resources = [
-      "${module.s3.output_bucket_arn}/*"
+      "${var.output_bucket_arn}/*"
     ]
   }
 }
 
 # Policy to attach to the MediaConvert IAM role.
 resource "aws_iam_policy" "mediaconvert_role_policy" {
-  name   = "MediaConvert_Default_Role_Policy"
+  name   = var.mediaconvert_role_policy_name
   policy = data.aws_iam_policy_document.mediaconvert_policy_document.json
 }
 
