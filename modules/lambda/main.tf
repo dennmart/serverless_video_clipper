@@ -1,8 +1,8 @@
 # Generates an archive of the Lambda function that's triggered by the S3 bucket notification.
 data "archive_file" "lambda_input_function" {
   type        = "zip"
-  source_dir  = "${path.module}/../../../lambda/input"
-  output_path = "input_function.zip"
+  source_dir  = "${path.module}/../../lambda/input"
+  output_path = "lambda/input_function.zip"
 }
 
 # Uploads our Lambda function for processing videos with the proper roles.
@@ -35,8 +35,8 @@ resource "aws_lambda_permission" "allow_bucket" {
 
 data "archive_file" "lambda_cleanup_function" {
   type        = "zip"
-  source_dir  = "${path.module}/../../../lambda/cleanup"
-  output_path = "cleanup_function.zip"
+  source_dir  = "${path.module}/../../lambda/cleanup"
+  output_path = "lambda/cleanup_function.zip"
 }
 
 resource "aws_lambda_function" "cleanup_function" {
