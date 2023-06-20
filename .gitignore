@@ -33,3 +33,6 @@ terraform.rc
 
 # Ignore packaged Lambda functions in Terraform
 lambda/*.zip
+
+# Ignore the S3 backend configuration file
+backend.conf
