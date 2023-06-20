@@ -8,8 +8,23 @@ variable "input_function_role" {
   type        = string
 }
 
+variable "input_bucket_id" {
+  description = "The ID of the S3 bucket for deleting processed videos from the Lambda cleanup function."
+  type        = string
+}
+
+variable "input_bucket_arn" {
+  description = "The ARN of the S3 bucket that will invoke the Lambda function."
+  type        = string
+}
+
 variable "output_bucket_id" {
   description = "The ID of the S3 bucket where the output files from MediaConvert are stored."
+  type        = string
+}
+
+variable "processed_bucket_id" {
+  description = "The ID of the S3 bucket to place processed videos from the Lambda cleanup function."
   type        = string
 }
 
@@ -20,11 +35,6 @@ variable "mediaconvert_role_arn" {
 
 variable "mediaconvert_queue_arn" {
   description = "The ARN of the MediaConvert queue that will process the videos."
-  type        = string
-}
-
-variable "input_bucket_arn" {
-  description = "The ARN of the S3 bucket that will invoke the Lambda function."
   type        = string
 }
 

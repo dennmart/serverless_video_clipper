@@ -27,19 +27,16 @@ export const handler = async (event) => {
   const s3Client = new S3Client({ region: "ap-northeast-1" });
   const copyCommand = new CopyObjectCommand({
     CopySource: inputFile.replace("s3://", ""),
-    Bucket: "video-clipper-input", //process.env.PROCESSED_BUCKET,
-    Key: `processed-videos/${inputFile.split("/").pop()}`,
+    Bucket: process.env.PROCESSED_BUCKET,
+    Key: `${inputFile.split("/").pop()}`,
   });
   const s3Response = await s3Client.send(copyCommand);
 
   const deleteCommand = new DeleteObjectCommand({
-    Bucket: "video-clipper-input", //process.env.PROCESSED_BUCKET,
+    Bucket: process.env.INPUT_BUCKET,
     Key: inputFile.split("/").pop(),
   });
   await s3Client.send(deleteCommand);
-
-  // 4. Copy the input file into the processed videos folder
-  // 5. Delete the original input file
 
   return {
     statusCode: 200,

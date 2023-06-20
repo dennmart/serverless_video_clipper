@@ -46,6 +46,13 @@ resource "aws_lambda_function" "cleanup_function" {
   handler          = "lambda.handler"
   runtime          = "nodejs18.x"
   source_code_hash = data.archive_file.lambda_cleanup_function.output_base64sha256
+
+  environment {
+    variables = {
+      PROCESSED_BUCKET = var.processed_bucket_id
+      INPUT_BUCKET     = var.input_bucket_id
+    }
+  }
 }
 
 resource "aws_lambda_permission" "allow_event_bridge" {
