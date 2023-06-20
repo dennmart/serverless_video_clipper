@@ -22,3 +22,8 @@ output "processed_bucket_id" {
   description = "The bucket name for storing processed videos marked for deletion"
   value       = aws_s3_bucket.processed_videos_bucket.id
 }
+
+output "processed_bucket_arn" {
+  description = "The ARN of the bucket for storing processed videos marked for deletion"
+  value       = aws_s3_bucket.processed_videos_bucket.arn
+}

@@ -118,11 +118,21 @@ data "aws_iam_policy_document" "lambda_job_complete_policy_document" {
   statement {
     effect = "Allow"
     actions = [
-      "s3:CopyObject",
+      "s3:GetObject",
       "s3:DeleteObject"
     ]
     resources = [
       "${var.input_bucket_arn}/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject"
+    ]
+    resources = [
+      "${var.processed_bucket_arn}/*"
     ]
   }
 

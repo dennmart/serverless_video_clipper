@@ -42,3 +42,8 @@ variable "mediaconvert_role_policy_name" {
   description = "The name of the IAM policy for the MediaConvert role"
   type        = string
 }
+
+variable "processed_bucket_arn" {
+  description = "The ARN of the S3 bucket to store the processed videos for future deletion"
+  type        = string
+}

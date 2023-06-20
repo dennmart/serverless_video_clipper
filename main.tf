@@ -59,4 +59,5 @@ module "iam" {
   mediaconvert_iam_role_name        = var.mediaconvert_role_name
   output_bucket_arn                 = module.s3.output_bucket_arn
   mediaconvert_role_policy_name     = var.mediaconvert_role_policy_name
+  processed_bucket_arn              = module.s3.processed_bucket_arn
 }
