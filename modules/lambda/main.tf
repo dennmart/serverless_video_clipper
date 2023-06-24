@@ -22,6 +22,23 @@ resource "aws_lambda_function" "input_function" {
       MEDIACONVERT_QUEUE_ARN = var.mediaconvert_queue_arn
     }
   }
+
+  dead_letter_config {
+    target_arn = var.dlq_sns_topic_arn
+  }
+}
+
+# Configures the published Lambda input function to send a message to the
+# specified SNS topic when asynchronous invokation fails.
+resource "aws_lambda_function_event_invoke_config" "input_function_invoke_config" {
+  function_name = aws_lambda_function.input_function.function_name
+  qualifier     = aws_lambda_function.input_function.version
+
+  destination_config {
+    on_failure {
+      destination = var.dlq_sns_topic_arn
+    }
+  }
 }
 
 # Grants the S3 bucket permission to invoke our Lambda function.
@@ -51,6 +68,23 @@ resource "aws_lambda_function" "cleanup_function" {
     variables = {
       PROCESSED_BUCKET = var.processed_bucket_id
       INPUT_BUCKET     = var.input_bucket_id
+    }
+  }
+
+  dead_letter_config {
+    target_arn = var.dlq_sns_topic_arn
+  }
+}
+
+# Configures the published Lambda cleanup function to send a message to the
+# specified SNS topic when asynchronous invokation fails.
+resource "aws_lambda_function_event_invoke_config" "cleanup_function_invoke_config" {
+  function_name = aws_lambda_function.cleanup_function.function_name
+  qualifier     = aws_lambda_function.cleanup_function.version
+
+  destination_config {
+    on_failure {
+      destination = var.dlq_sns_topic_arn
     }
   }
 }

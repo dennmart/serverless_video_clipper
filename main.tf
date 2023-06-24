@@ -34,6 +34,7 @@ module "lambda" {
   cleanup_function_name  = var.cleanup_function_name
   cleanup_function_role  = module.iam.cleanup_function_role_arn
   eventbridge_rule_arn   = module.eventbridge.media_convert_job_completed_rule_arn
+  dlq_sns_topic_arn      = module.sns.dead_letter_queue_topic_arn
 }
 
 module "media_convert" {
@@ -69,4 +70,5 @@ module "iam" {
   output_bucket_arn                 = module.s3.output_bucket_arn
   mediaconvert_role_policy_name     = var.mediaconvert_role_policy_name
   processed_bucket_arn              = module.s3.processed_bucket_arn
+  dlq_sns_topic_arn                 = module.sns.dead_letter_queue_topic_arn
 }

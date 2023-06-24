@@ -52,3 +52,8 @@ variable "eventbridge_rule_arn" {
   description = "The ARN of the EventBridge rule that will trigger the cleanup Lambda function."
   type        = string
 }
+
+variable "dlq_sns_topic_arn" {
+  description = "The ARN of the SNS topic for the dead letter queue on Lambda functions"
+  type        = string
+}

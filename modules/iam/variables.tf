@@ -47,3 +47,8 @@ variable "processed_bucket_arn" {
   description = "The ARN of the S3 bucket to store the processed videos for future deletion"
   type        = string
 }
+
+variable "dlq_sns_topic_arn" {
+  description = "The ARN of the SNS topic for the dead letter queue on Lambda functions"
+  type        = string
+}

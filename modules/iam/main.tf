@@ -98,6 +98,16 @@ data "aws_iam_policy_document" "lambda_policy_document" {
       var.media_convert_queue_arn
     ]
   }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sns:Publish"
+    ]
+    resources = [
+      var.dlq_sns_topic_arn
+    ]
+  }
 }
 
 # Policy to attach to the Lambda input IAM role.
@@ -161,6 +171,16 @@ data "aws_iam_policy_document" "lambda_job_complete_policy_document" {
     ]
     resources = [
       local.mediaconvert_jobs_arn
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "sns:Publish"
+    ]
+    resources = [
+      var.dlq_sns_topic_arn
     ]
   }
 }
