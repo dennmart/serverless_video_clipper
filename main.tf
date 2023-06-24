@@ -49,6 +49,13 @@ module "eventbridge" {
   cleanup_function_arn  = module.lambda.cleanup_function_arn
 }
 
+module "sns" {
+  source = "./modules/sns"
+
+  dead_letter_queue_topic_name         = var.dead_letter_queue_topic_name
+  dead_letter_queue_subscription_email = var.dead_letter_queue_subscription_email
+}
+
 module "iam" {
   source = "./modules/iam"
 
