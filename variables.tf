@@ -38,6 +38,11 @@ variable "eventbridge_rule_name" {
   type        = string
 }
 
+variable "eventbridge_error_rule_name" {
+  description = "The name of the EventBridge rule to use for MediaConvert job error notifications"
+  type        = string
+}
+
 variable "mediaconvert_role_policy_name" {
   description = "The name of the IAM policy to attach to the MediaConvert IAM role"
   type        = string

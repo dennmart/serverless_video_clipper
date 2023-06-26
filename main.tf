@@ -46,8 +46,10 @@ module "media_convert" {
 module "eventbridge" {
   source = "./modules/eventbridge"
 
-  eventbridge_rule_name = var.eventbridge_rule_name
-  cleanup_function_arn  = module.lambda.cleanup_function_arn
+  eventbridge_rule_name       = var.eventbridge_rule_name
+  cleanup_function_arn        = module.lambda.cleanup_function_arn
+  eventbridge_error_rule_name = var.eventbridge_error_rule_name
+  sns_error_topic_arn         = module.sns.dead_letter_queue_topic_arn
 }
 
 module "sns" {
