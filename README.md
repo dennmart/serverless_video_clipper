@@ -45,3 +45,4 @@ Since this is an example application, some known issues and tradeoffs were inten
 
 - The Lambda function for processing the input files looks for MP4 files only. Ideally, the function would work with any video file that Elemental MediaConvert accepts.
 - Error handling is minimal, with only an SNS email notification sending the failed event. Some areas left uncovered are modifying the notification email and cleaning up any invalid objects uploaded to the input bucket.
+- A nice-to-have function is to send a notification after processing the video with presigned URLs to allow the recipient to download the files from the private output bucket.
